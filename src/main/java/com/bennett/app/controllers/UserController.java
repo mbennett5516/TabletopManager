@@ -24,8 +24,8 @@ public class UserController {
 	UserService userService;
 	
 	@GetMapping
-	public UserResponse getUser(@RequestParam String id){
-		return null;
+	public String getUser(){
+		return "Get Users was called";
 	}
 	
 	@PostMapping
