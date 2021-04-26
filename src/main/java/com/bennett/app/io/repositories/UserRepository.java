@@ -7,5 +7,5 @@ import com.bennett.app.io.entities.UserEntity;
 
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
-	UserEntity findUserByEmail(String email);
+	UserEntity findByEmail(String email);
 }

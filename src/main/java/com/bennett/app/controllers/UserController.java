@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bennett.app.services.UserService;
@@ -23,8 +24,8 @@ public class UserController {
 	UserService userService;
 	
 	@GetMapping
-	public String getUser() {
-		return "Get User was called";
+	public UserResponse getUser(@RequestParam String id){
+		return null;
 	}
 	
 	@PostMapping
