@@ -17,8 +17,8 @@ import com.bennett.app.shared.Utils;
 import com.bennett.app.shared.dto.UserDto;
 
 @Service
-public class UserServiceImpl implements UserService{
-	
+public class UserServiceImpl implements UserService {
+
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
@@ -28,21 +28,21 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public UserDto createUser(UserDto user) {
-		
-		if(userRepository.findByEmail(user.getEmail()) != null) {
+
+		if (userRepository.findByEmail(user.getEmail()) != null) {
 			throw new RuntimeException("Record already exists");
 		}
-		
+
 		UserEntity userEntity = new UserEntity();
 		BeanUtils.copyProperties(user, userEntity);
 
 		userEntity.setUserId(utils.generateUserId(30));
 		userEntity.setEncryptedPassword(bcrypt.encode(user.getPassword()));
-		
+
 		UserEntity savedUser = userRepository.save(userEntity);
 		UserDto returnValue = new UserDto();
 		BeanUtils.copyProperties(savedUser, returnValue);
-		
+
 		return returnValue;
 	}
 
@@ -52,8 +52,20 @@ public class UserServiceImpl implements UserService{
 		if (userEntity == null) {
 			throw new UsernameNotFoundException(email);
 		}
-		
+
 		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+	}
+
+	@Override
+	public UserDto getUser(String email) {
+		UserEntity userEntity = userRepository.findByEmail(email);
+		if (userEntity == null) {
+			throw new UsernameNotFoundException(email);
+		}
+
+		UserDto returnValue = new UserDto();
+		BeanUtils.copyProperties(userEntity, returnValue);
+		return returnValue;
 	}
 
 }
