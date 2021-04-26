@@ -17,4 +17,8 @@ public class TabletopManagerApplication {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Bean
+	SpringApplicationContext springApplicationContext() {
+		return new SpringApplicationContext();
+	}
 }
