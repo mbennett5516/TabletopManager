@@ -1,9 +1,13 @@
 package com.bennett.app.services.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,7 +36,7 @@ public class UserServiceImpl implements UserService {
 	public UserDto createUser(UserDto user) {
 
 		if (userRepository.findByEmail(user.getEmail()) != null) {
-			throw new RuntimeException("Record already exists");
+			throw new UserServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
 		}
 
 		UserEntity userEntity = new UserEntity();
@@ -52,7 +56,7 @@ public class UserServiceImpl implements UserService {
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		UserEntity userEntity = userRepository.findByEmail(email);
 		if (userEntity == null) {
-			throw new UsernameNotFoundException(email);
+			throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 		}
 
 		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
@@ -62,7 +66,7 @@ public class UserServiceImpl implements UserService {
 	public UserDto getUser(String email) {
 		UserEntity userEntity = userRepository.findByEmail(email);
 		if (userEntity == null) {
-			throw new UsernameNotFoundException(email);
+			throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 		}
 
 		UserDto returnValue = new UserDto();
@@ -84,10 +88,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto updateUser(String userId, UserDto userDto) {
-		
+
 		UserDto returnValue = new UserDto();
 		UserEntity userEntity = userRepository.findByUserId(userId);
-		
+
 		if (userEntity == null) {
 			throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 		}
@@ -97,20 +101,38 @@ public class UserServiceImpl implements UserService {
 
 		UserEntity updatedUserDetails = userRepository.save(userEntity);
 		BeanUtils.copyProperties(updatedUserDetails, returnValue);
-		
+
 		return returnValue;
 	}
 
 	@Override
 	public void deleteUser(String userId) {
-		
+
 		UserEntity userEntity = userRepository.findByUserId(userId);
-		
+
 		if (userEntity == null) {
 			throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
 		}
-		
+
 		userRepository.delete(userEntity);
+	}
+
+	@Override
+	public List<UserDto> getUsers(int page, int limit) {
+		List<UserDto> returnValue = new ArrayList<>();
+		
+		if (page >0) page--;
+		
+		Pageable pageableRequest = PageRequest.of(page, limit);
+		Page<UserEntity> users = userRepository.findAll(pageableRequest);
+		
+		for (UserEntity user: users) {
+			UserDto userModel = new UserDto();
+			BeanUtils.copyProperties(user, userModel);
+			returnValue.add(userModel);
+		}
+		
+		return returnValue;
 	}
 
 }
