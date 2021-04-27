@@ -26,7 +26,7 @@ import com.bennett.app.ui.models.responses.RequestOperationStatus;
 import com.bennett.app.ui.models.responses.UserResponse;
 
 @RestController
-@RequestMapping("/users") // http://www.localhost:8080/users
+@RequestMapping("/users") // http://www.localhost:8080/TabletopManager/users
 public class UserController {
 
 	@Autowired
