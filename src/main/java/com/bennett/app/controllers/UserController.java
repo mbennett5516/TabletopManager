@@ -16,7 +16,9 @@ import com.bennett.app.exceptions.UserServiceException;
 import com.bennett.app.services.UserService;
 import com.bennett.app.shared.dto.UserDto;
 import com.bennett.app.ui.models.requests.UserDetailsRequestModel;
-import com.bennett.app.ui.models.responses.ErrorMessages;
+import com.bennett.app.ui.models.responses.OperationStatusModel;
+import com.bennett.app.ui.models.responses.RequestOperationName;
+import com.bennett.app.ui.models.responses.RequestOperationStatus;
 import com.bennett.app.ui.models.responses.UserResponse;
 
 @RestController
@@ -42,7 +44,7 @@ public class UserController {
 	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public UserResponse createUser(@RequestBody UserDetailsRequestModel userDetails) throws UserServiceException {
-
+		
 		UserResponse returnValue = new UserResponse();
 
 		UserDto userDto = new UserDto();
@@ -69,9 +71,18 @@ public class UserController {
 		return returnValue;
 	}
 
-	@DeleteMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, consumes = {
+	@DeleteMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	public String deleteUser() {
-		return "Delete User was called";
+	public OperationStatusModel deleteUser(@PathVariable String id) {
+		
+		OperationStatusModel returnValue = new OperationStatusModel();
+	
+		returnValue.setOperationName(RequestOperationName.DELETE.name());
+		
+		userService.deleteUser(id);
+		
+		returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		
+		return returnValue;
 	}
 }
