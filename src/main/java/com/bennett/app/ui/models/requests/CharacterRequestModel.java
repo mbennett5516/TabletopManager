@@ -4,16 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.bennett.app.ui.models.AttackOrSpell;
+import com.bennett.app.ui.models.Job;
 import com.bennett.app.ui.models.Spell;
 
 public class CharacterRequestModel {
 
 	private String name;
-	private boolean milestoneLeveling;
-	private boolean fixedHpIncreaseOnLevelUp;
-	private boolean privateCharacter;
+	private boolean milestoneLeveling = false;
+	private boolean fixedHpIncreaseOnLevelUp = true;
+	private boolean privateCharacter = false;
 	private String race;
-	private Map<String, Integer> jobs;
+	private List<Job> classesAndLevels;
 	private String background;
 	private String alignment;
 	private double exp;
@@ -24,7 +25,7 @@ public class CharacterRequestModel {
 	private String skin;
 	private String hair;
 	private Map<String, Integer> abilityScores;
-	private boolean inspiration;
+	private boolean inspiration = false;
 	private int proficiencyBonus;
 	private Map<String, Integer> savingThrows;
 	private Map<String, Integer> skills;
@@ -34,10 +35,10 @@ public class CharacterRequestModel {
 	private Map<String, Integer> hitDice;
 	private int deathSaveSuccesses;
 	private int deathSaveFailures;
-	private String personalityTraits;
-	private String ideals;
-	private String bonds;
-	private String flaws;
+	private List<String> personalityTraits;
+	private List<String> ideals;
+	private List<String> bonds;
+	private List<String> flaws;
 	private List<AttackOrSpell> attacksAndSpells;
 	private List<String> otherProficienciesAndLanguages;
 	private List<String> equipment;
@@ -121,12 +122,12 @@ public class CharacterRequestModel {
 		this.race = race;
 	}
 
-	public Map<String, Integer> getJobs() {
-		return jobs;
+	public List<Job> getJobs() {
+		return classesAndLevels;
 	}
 
-	public void setJobs(Map<String, Integer> jobs) {
-		this.jobs = jobs;
+	public void setJobs(List<Job> jobs) {
+		this.classesAndLevels = jobs;
 	}
 
 	public String getBackground() {
@@ -289,35 +290,35 @@ public class CharacterRequestModel {
 		this.deathSaveFailures = deathSaveFailures;
 	}
 
-	public String getPersonalityTraits() {
+	public List<String> getPersonalityTraits() {
 		return personalityTraits;
 	}
 
-	public void setPersonalityTraits(String personalityTraits) {
+	public void setPersonalityTraits(List<String> personalityTraits) {
 		this.personalityTraits = personalityTraits;
 	}
 
-	public String getIdeals() {
+	public List<String> getIdeals() {
 		return ideals;
 	}
 
-	public void setIdeals(String ideals) {
+	public void setIdeals(List<String> ideals) {
 		this.ideals = ideals;
 	}
 
-	public String getBonds() {
+	public List<String> getBonds() {
 		return bonds;
 	}
 
-	public void setBonds(String bonds) {
+	public void setBonds(List<String> bonds) {
 		this.bonds = bonds;
 	}
 
-	public String getFlaws() {
+	public List<String> getFlaws() {
 		return flaws;
 	}
 
-	public void setFlaws(String flaws) {
+	public void setFlaws(List<String> flaws) {
 		this.flaws = flaws;
 	}
 
